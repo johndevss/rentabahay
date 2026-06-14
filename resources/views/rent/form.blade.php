@@ -51,23 +51,35 @@
                 <!-- Section 2: Meralco Sub-meter Calculator -->
                 <div>
                     <h3 class="text-xs font-bold uppercase tracking-wider text-amber-600 mb-4 block border-b border-amber-50 pb-1">2. Meralco Sub-Meter (Kuntador)</h3>
-                    <div class="grid grid-cols-1 md:grid-cols-3 gap-4">
+                    <div class="grid grid-cols-1 md:grid-cols-2 gap-4 mb-4">
                         <div>
                             <label class="block text-xs font-bold text-gray-500 mb-2">Total Meralco Bill (PHP)</label>
-                            <input type="number" step="0.01" name="meralco_total_bill" placeholder="0.00" required class="w-full px-4 py-2.5 bg-gray-50/50 border border-gray-200 rounded-xl shadow-sm text-sm text-gray-900 focus:outline-none focus:border-blue-500 focus:ring-4 focus:ring-blue-500/10 transition">
-                            <span class="text-[10px] text-gray-400 mt-1 block">Grand total on the paper bill.</span>
+                            <input type="number" step="0.01" name="meralco_total_bill" placeholder="0.00" required
+                                class="w-full px-4 py-2.5 bg-gray-50/50 border border-gray-200 rounded-xl shadow-sm text-sm text-gray-900 focus:outline-none focus:border-blue-500 focus:ring-4 focus:ring-blue-500/10 transition">
+                            <span class="text-[10px] text-gray-400 mt-1 block">Grand total on the paper bill (for reference).</span>
                         </div>
 
                         <div>
-                            <label class="block text-xs font-bold text-gray-500 mb-2">Main Meter Usage (kWh)</label>
-                            <input type="number" step="0.1" name="meralco_main_kwh" placeholder="e.g. 320.5" required class="w-full px-4 py-2.5 bg-gray-50/50 border border-gray-200 rounded-xl shadow-sm text-sm text-gray-900 focus:outline-none focus:border-blue-500 focus:ring-4 focus:ring-blue-500/10 transition">
-                            <span class="text-[10px] text-gray-400 mt-1 block">Total power used by property.</span>
+                            <label class="block text-xs font-bold text-gray-500 mb-2">Rate per kWh (PHP)</label>
+                            <input type="number" step="0.0001" name="meralco_rate_per_kwh" placeholder="e.g. 12.3456" required
+                                class="w-full px-4 py-2.5 bg-gray-50/50 border border-gray-200 rounded-xl shadow-sm text-sm text-gray-900 focus:outline-none focus:border-blue-500 focus:ring-4 focus:ring-blue-500/10 transition">
+                            <span class="text-[10px] text-gray-400 mt-1 block">Found on the Meralco bill breakdown.</span>
+                        </div>
+                    </div>
+
+                    <div class="grid grid-cols-1 md:grid-cols-2 gap-4">
+                        <div>
+                            <label class="block text-xs font-bold text-gray-500 mb-2">Previous Sub-Meter Reading (kWh)</label>
+                            <input type="number" step="0.1" name="tenant_prev_reading" placeholder="e.g. 1240.5" required
+                                class="w-full px-4 py-2.5 bg-gray-50/50 border border-gray-200 rounded-xl shadow-sm text-sm text-gray-900 focus:outline-none focus:border-blue-500 focus:ring-4 focus:ring-blue-500/10 transition">
+                            <span class="text-[10px] text-gray-400 mt-1 block">Last month's reading from the sub-meter.</span>
                         </div>
 
                         <div>
-                            <label class="block text-xs font-bold text-gray-500 mb-2">Tenant Sub-Meter (kWh)</label>
-                            <input type="number" step="0.1" name="tenant_kuntador_kwh" placeholder="e.g. 45.2" required class="w-full px-4 py-2.5 bg-gray-50/50 border border-gray-200 rounded-xl shadow-sm text-sm text-gray-900 focus:outline-none focus:border-blue-500 focus:ring-4 focus:ring-blue-500/10 transition">
-                            <span class="text-[10px] text-gray-400 mt-1 block">Reading from their end.</span>
+                            <label class="block text-xs font-bold text-gray-500 mb-2">Current Sub-Meter Reading (kWh)</label>
+                            <input type="number" step="0.1" name="tenant_curr_reading" placeholder="e.g. 1285.7" required
+                                class="w-full px-4 py-2.5 bg-gray-50/50 border border-gray-200 rounded-xl shadow-sm text-sm text-gray-900 focus:outline-none focus:border-blue-500 focus:ring-4 focus:ring-blue-500/10 transition">
+                            <span class="text-[10px] text-gray-400 mt-1 block">This month's reading from the sub-meter.</span>
                         </div>
                     </div>
                 </div>

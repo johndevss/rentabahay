@@ -6,31 +6,28 @@ use Illuminate\Support\Facades\Schema;
 
 return new class extends Migration
 {
-    /**
-     * Run the migrations.
-     */
     public function up(): void
     {
-        // database/migrations/xxxx_xx_xx_create_receipts_table.php
         Schema::create('receipts', function (Blueprint $table) {
             $table->id();
-            
-            // This connects the receipt to a specific tenant id row
             $table->foreignId('tenant_id')->constrained()->onDelete('cascade');
             
-            $table->string('billing_month'); 
+            $table->string('billing_month');
             $table->decimal('base_rent', 10, 2);
-            $table->decimal('meralco_total_bill', 10, 2);
-            $table->decimal('meralco_main_kwh', 10, 2);
-            $table->decimal('tenant_kuntador_kwh', 10, 2);
+
+            // Meralco sub-meter fields
+            $table->decimal('meralco_total_bill', 10, 2);   // kept for reference/record
+            $table->decimal('meralco_rate_per_kwh', 8, 4);  // e.g. 12.1234 PHP/kWh — from Meralco receipt
+            $table->decimal('tenant_prev_reading', 10, 2);  // sub-meter reading last month
+            $table->decimal('tenant_curr_reading', 10, 2);  // sub-meter reading this month
+
+            // Maynilad
             $table->decimal('maynilad_total_bill', 10, 2);
+
             $table->timestamps();
         });
     }
 
-    /**
-     * Reverse the migrations.
-     */
     public function down(): void
     {
         Schema::dropIfExists('receipts');

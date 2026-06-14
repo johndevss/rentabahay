@@ -89,13 +89,14 @@ class RentController extends Controller
     public function store(Request $request)
     {
         $validated = $request->validate([
-            'tenant_id'           => 'required|exists:tenants,id', // Checks if ID is real in MySQL
-            'base_rent'           => 'required|numeric|min:0',
-            'billing_month'       => 'required|string',
-            'meralco_total_bill'  => 'required|numeric|min:0',
-            'meralco_main_kwh'    => 'required|numeric|min:0',
-            'tenant_kuntador_kwh' => 'required|numeric|min:0',
-            'maynilad_total_bill' => 'required|numeric|min:0',
+            'tenant_id'            => 'required|exists:tenants,id',
+            'base_rent'            => 'required|numeric|min:0',
+            'billing_month'        => 'required|string',
+            'meralco_total_bill'   => 'required|numeric|min:0',
+            'meralco_rate_per_kwh' => 'required|numeric|min:0',  // ← new
+            'tenant_prev_reading'  => 'required|numeric|min:0',  // ← new
+            'tenant_curr_reading'  => 'required|numeric|min:0',  // ← new
+            'maynilad_total_bill'  => 'required|numeric|min:0',
         ]);
 
         Receipt::create($validated);
@@ -125,12 +126,14 @@ class RentController extends Controller
         $receipt = Receipt::findOrFail($id);
 
         $validated = $request->validate([
-            'base_rent'           => 'required|numeric|min:0',
-            'billing_month'       => 'required|string',
-            'meralco_total_bill'  => 'required|numeric|min:0',
-            'meralco_main_kwh'    => 'required|numeric|min:0',
-            'tenant_kuntador_kwh' => 'required|numeric|min:0',
-            'maynilad_total_bill' => 'required|numeric|min:0',
+            'tenant_id'            => 'required|exists:tenants,id',
+            'base_rent'            => 'required|numeric|min:0',
+            'billing_month'        => 'required|string',
+            'meralco_total_bill'   => 'required|numeric|min:0',
+            'meralco_rate_per_kwh' => 'required|numeric|min:0',  // ← new
+            'tenant_prev_reading'  => 'required|numeric|min:0',  // ← new
+            'tenant_curr_reading'  => 'required|numeric|min:0',  // ← new
+            'maynilad_total_bill'  => 'required|numeric|min:0',
         ]);
 
         $receipt->update($validated);
