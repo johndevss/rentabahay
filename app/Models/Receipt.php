@@ -57,4 +57,28 @@ class Receipt extends Model
             get: fn () => $this->base_rent + $this->utilities_total,
         );
     }
+
+    /**
+     * 4. Tenant's share of Meralco bill
+     * Formula: (tenant's kWh / main meter kWh) × total Meralco bill
+     */
+    protected function meralcoBill(): Attribute
+    {
+        return Attribute::make(
+            get: fn () => $this->meralco_main_kwh > 0
+                ? ($this->tenant_kuntador_kwh / $this->meralco_main_kwh) * $this->meralco_total_bill
+                : 0,
+        );
+    }
+
+    /**
+     * 5. Maynilad bill (passed through directly)
+     * No sub-metering for water, so the tenant pays the full amount entered
+     */
+    protected function mayniladBill(): Attribute
+    {
+        return Attribute::make(
+            get: fn () => $this->maynilad_total_bill,
+        );
+    }
 }
