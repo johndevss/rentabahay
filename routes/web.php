@@ -14,3 +14,7 @@ Route::get('/receipt/{id}', [RentController::class, 'show']);
 Route::get('/tenants', [RentController::class, 'tenantIndex']);
 
 Route::post('/tenants', [RentController::class, 'tenantStore']);
+
+Route::get('/profile', [RentController::class, 'profileEdit']);
+
+Route::post('/profile', [RentController::class, 'profileUpdate']);

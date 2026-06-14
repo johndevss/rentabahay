@@ -13,15 +13,40 @@
             </button>
         </div>
 
-        <div class="bg-white p-8 md:p-12 rounded-3xl shadow-sm border border-gray-100/80 relative overflow-hidden print:border-0 print:shadow-none">
+        {{-- Missing profile warning — screen only, won't print --}}
+        @if(!$profile)
+        <div class="bg-amber-50 border border-amber-200 text-amber-700 text-sm px-5 py-3 rounded-2xl no-print">
+            ⚠️ No landlord profile set. 
+            <a href="/profile" class="underline font-semibold">Set it up here</a> — it will appear on all receipts.
+        </div>
+        @endif
+
+        {{-- Optimized container padding for clean print margins --}}
+        <div class="bg-white p-8 md:p-12 print:p-6 rounded-3xl shadow-sm border border-gray-100/80 relative overflow-hidden print:border-0 print:shadow-none">
             
+            {{-- Top color bar --}}
             <div class="absolute top-0 left-0 right-0 h-2 bg-gradient-to-r from-blue-500 to-indigo-600"></div>
 
-            <div class="flex flex-col sm:flex-row justify-between items-start gap-4 border-b border-gray-100 pb-8">
+            {{-- ── HEADER ── --}}
+            <div class="flex flex-col sm:flex-row justify-between items-start gap-6 border-b border-gray-100 pb-8 print:pb-4">
+                
+                {{-- Left: Brand + Landlord Info --}}
                 <div>
-                    <h1 class="text-2xl font-black text-gray-900 tracking-tight">renta<span class="text-blue-600 font-medium">bahay</span></h1>
+                    <h1 class="text-2xl font-black text-gray-900 tracking-tight">
+                        renta<span class="text-blue-600 font-medium">bahay</span>
+                    </h1>
                     <p class="text-xs text-gray-400 mt-1">Official Rent & Utility Statement</p>
+
+                    @if($profile)
+                    <div class="mt-4 space-y-0.5">
+                        <p class="text-sm font-bold text-gray-800">{{ $profile->full_name }}</p>
+                        <p class="text-xs text-gray-400">{{ $profile->address }}</p>
+                        <p class="text-xs text-gray-400">{{ $profile->email }} · {{ $profile->contact_number }}</p>
+                    </div>
+                    @endif
                 </div>
+
+                {{-- Right: Billing Period --}}
                 <div class="sm:text-right">
                     <span class="text-xs font-bold uppercase tracking-wider text-gray-400">Billing Period</span>
                     <h2 class="text-lg font-bold text-gray-900 mt-0.5">{{ $receipt->month }}</h2>
@@ -29,7 +54,8 @@
                 </div>
             </div>
 
-            <div class="grid grid-cols-1 sm:grid-cols-2 gap-6 py-8 border-b border-gray-100">
+            {{-- ── BILLED TO + STATEMENT ID ── --}}
+            <div class="grid grid-cols-1 sm:grid-cols-2 gap-6 py-8 print:py-4 border-b border-gray-100">
                 <div>
                     <span class="text-xs font-bold uppercase tracking-wider text-gray-400 block mb-1">Billed To:</span>
                     <h3 class="text-base font-bold text-gray-900">{{ $receipt->tenant->name }}</h3>
@@ -41,10 +67,11 @@
                 </div>
             </div>
 
-            <div class="py-8">
-                <h4 class="text-xs font-bold uppercase tracking-wider text-gray-400 mb-4">Charge Breakdown</h4>
+            {{-- ── CHARGE BREAKDOWN ── --}}
+            <div class="py-8 print:py-4">
+                <h4 class="text-xs font-bold uppercase tracking-wider text-gray-400 mb-4 print:mb-2">Charge Breakdown</h4>
                 
-                <div class="space-y-4">
+                <div class="space-y-4 print:space-y-2">
                     <div class="flex justify-between items-center py-2">
                         <div>
                             <p class="text-sm font-bold text-gray-900">Base House Rent</p>
@@ -53,7 +80,7 @@
                         <span class="text-sm font-semibold text-gray-900">PHP {{ number_format($receipt->base_rent, 2) }}</span>
                     </div>
 
-                    <div class="flex justify-between items-start py-2 border-t border-gray-50 pt-4">
+                    <div class="flex justify-between items-start py-2 border-t border-gray-50 pt-4 print:pt-2">
                         <div>
                             <p class="text-sm font-bold text-gray-900">Meralco Power Share (Sub-meter)</p>
                             <p class="text-xs text-gray-400 mt-0.5 max-w-md leading-relaxed">
@@ -65,7 +92,7 @@
                         <span class="text-sm font-semibold text-gray-900">PHP {{ number_format($receipt->meralco_bill, 2) }}</span>
                     </div>
 
-                    <div class="flex justify-between items-start py-2 border-t border-gray-50 pt-4">
+                    <div class="flex justify-between items-start py-2 border-t border-gray-50 pt-4 print:pt-2">
                         <div>
                             <p class="text-sm font-bold text-gray-900">Maynilad Water Share (50/50 Split)</p>
                             <p class="text-xs text-gray-400 mt-0.5">
@@ -77,26 +104,30 @@
                 </div>
             </div>
 
-            <div class="mt-4 bg-gray-50 rounded-2xl p-6 flex justify-between items-center border border-gray-100">
+            {{-- ── TOTAL ── --}}
+            <div class="mt-4 bg-gray-50 rounded-2xl p-6 print:p-4 flex justify-between items-center border border-gray-100">
                 <div>
                     <span class="text-xs font-bold uppercase tracking-wider text-gray-500 block">Total Due Amount</span>
                     <span class="text-[11px] text-green-600 font-medium mt-0.5 block">Status: Pending Payment</span>
                 </div>
                 <div class="text-right">
-                    <span class="text-2xl md:text-3xl font-black text-gray-900 tracking-tight">
+                    <span class="text-2xl md:text-3xl print:text-xl font-black text-gray-900 tracking-tight">
                         PHP {{ number_format($receipt->total, 2) }}
                     </span>
                 </div>
             </div>
 
-            <div class="mt-16 pt-8 border-t border-gray-100 grid grid-cols-2 gap-8 text-center text-xs text-gray-400">
+            {{-- ── SIGNATURE LINES ── --}}
+            <div class="mt-12 print:mt-8 pt-8 print:pt-4 border-t border-gray-100 grid grid-cols-2 gap-8 text-center text-xs text-gray-400">
                 <div>
                     <div class="h-12 border-b border-gray-200/60 max-w-[180px] mx-auto mb-2"></div>
-                    <p>Prepared By (Landlord)</p>
+                    <p class="font-medium text-gray-500">Prepared By</p>
+                    <p class="mt-0.5">{{ $profile->full_name ?? 'Landlord' }}</p>
                 </div>
                 <div>
                     <div class="h-12 border-b border-gray-200/60 max-w-[180px] mx-auto mb-2"></div>
-                    <p>Received By (Tenant)</p>
+                    <p class="font-medium text-gray-500">Received By</p>
+                    <p class="mt-0.5">{{ $receipt->tenant->name }}</p>
                 </div>
             </div>
 
@@ -105,6 +136,11 @@
 
     <style>
         @media print {
+            /* Hides browser headers, footers, and sets margins */
+            @page { 
+                size: auto;   /* Auto sizing handles both A4 and Letter nicely */
+                margin: 8mm;  /* Creates clean breathing room on paper */
+            }
             .no-print { display: none !important; }
             body { background-color: #ffffff !important; padding: 0 !important; }
         }

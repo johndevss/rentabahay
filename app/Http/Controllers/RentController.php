@@ -29,6 +29,29 @@ class RentController extends Controller
         return redirect('/tenants')->with('success', 'New tenant registered successfully!');
     }
 
+    public function profileEdit()
+    {
+        // Grab the single profile row, or return an empty model if none exists yet
+        $profile = \App\Models\LandlordProfile::first() ?? new \App\Models\LandlordProfile();
+
+        return view('rent.profile', compact('profile'));
+    }
+
+    public function profileUpdate(Request $request)
+    {
+        $validated = $request->validate([
+            'full_name'      => 'required|string|max:255',
+            'address'        => 'required|string|max:255',
+            'contact_number' => 'required|string|max:50',
+            'email'          => 'required|email|max:255',
+        ]);
+
+        // id: 1 means "always update the same single row, create it if first time"
+        \App\Models\LandlordProfile::updateOrCreate(['id' => 1], $validated);
+
+        return redirect('/profile')->with('success', 'Profile updated successfully!');
+    }
+
     public function index()
     {
         $latestReceipt = Receipt::latest()->first();
@@ -71,12 +94,12 @@ class RentController extends Controller
         return redirect('/')->with('success', 'Statement receipt generated successfully!');
     }
 
-    public function show(string $id)
+   public function show(string $id)
     {
-        // Find the matching receipt by ID or trigger a 404 page if someone tampers with the URL
         $receipt = Receipt::findOrFail($id);
-        
-        return view('rent.show', compact('receipt'));
+        $profile = \App\Models\LandlordProfile::first();
+
+        return view('rent.show', compact('receipt', 'profile'));
     }
 
     public function edit(string $id)
