@@ -11,11 +11,13 @@ return new class extends Migration
      */
     public function up(): void
     {
-        // database/migrations/xxxx_xx_xx_create_tenants_table.php
         Schema::create('tenants', function (Blueprint $table) {
             $table->id();
             $table->string('name');
-            $table->boolean('is_active')->default(true); // So you can turn off old tenants later
+            $table->string('occupation')->nullable();
+            $table->integer('occupants_count')->default(1);
+            $table->text('address')->nullable();
+            $table->boolean('is_active')->default(true);
             $table->timestamps();
         });
     }

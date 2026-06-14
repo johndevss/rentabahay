@@ -21,8 +21,17 @@ class RentController extends Controller
     public function tenantStore(Request $request)
     {
         $validated = $request->validate([
-            'name' => 'required|string|max:255|unique:tenants,name', // Prevents duplicate name records
+            'name'            => 'required|string|max:255|unique:tenants,name', 
+            'occupation'      => 'nullable|string|max:255',
+            'occupants_count' => 'required|integer|min:1',
+            'address'         => 'nullable|string',
         ]);
+
+        // Fallback to landlord address if left blank
+        if (empty($validated['address'])) {
+            $landlordProfile = \App\Models\LandlordProfile::first();
+            $validated['address'] = $landlordProfile ? $landlordProfile->address : 'Same as Landlord';
+        }
 
         Tenant::create($validated);
 
